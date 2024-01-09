@@ -1,13 +1,9 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { NavLink, Outlet } from "react-router-dom";
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
+import { Bars3Icon, BellIcon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { NavLink, Navigate, Outlet } from "react-router-dom";
+import { userStateContext } from "../contexts/ContextProvider";
+
 const navigation = [
   { name: "Dashboard", href: "/" },
   { name: "Exchanges", href: "/exchanges" },
@@ -29,6 +25,12 @@ function logOut(e) {
 }
 
 const GuestView = () => {
+  const {currentUser,userToken} = userStateContext();
+  if(!userToken){
+    return(
+      <Navigate to={"login"} />
+    )
+  }
   return (
     <>
       <div className="min-h-full">
@@ -83,11 +85,7 @@ const GuestView = () => {
                           <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
-                            <img
-                              className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
-                              alt=""
-                            />
+                            <UserIcon className="w-8 h-8 bg-black/25 rounded-full p-2 text-white"/>
                           </Menu.Button>
                         </div>
                         <Transition
@@ -165,18 +163,21 @@ const GuestView = () => {
                 <div className="border-t border-gray-700 pb-3 pt-4">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
+                     <UserIcon/>
+                    </div>
+                    <div className="flex-shrink-0">
                       <img
                         className="h-10 w-10 rounded-full"
-                        src={user.imageUrl}
+                        src={currentUser.imageUrl}
                         alt=""
                       />
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium leading-none text-white">
-                        {user.name}
+                        {currentUser.name}
                       </div>
                       <div className="text-sm font-medium leading-none text-gray-400">
-                        {user.email}
+                        {currentUser.email}
                       </div>
                     </div>
                     <button

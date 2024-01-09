@@ -5,6 +5,7 @@ import ExchangesPage from "./components/Exchanges/Exchanges";
 import Signup from "./components/Signup/Signup";
 import Dashboard from "./components/Dashboard/Dashboard";
 import GuestView from "./views/GuestView";
+import CreateExchange from "./components/Exchanges/CreateExchange";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
           {
             path: "exchanges",
             element: <ExchangesPage />,
+          },
+          {
+            path: "exchanges/create",
+            element: <CreateExchange />,
           },
         ],
       },

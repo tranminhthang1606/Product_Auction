@@ -1,4 +1,36 @@
+import { useState } from "react";
+import axiosClient from "../../axios";
 const Signup = () => {
+  const [username, setUsername] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [repassword, setRePassword] = useState();
+  const [message, setMessage] = useState({ __html: "" });
+
+  const HandleSignup = (e) => {
+    e.preventDefault();
+    setMessage({ __html: "" });
+    axiosClient
+      .post("/signup", {
+        name: username,
+        email: email,
+        password: password,
+        repassword: repassword,
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          const finalErrors = Object.values(error.response.data.errors).reduce(
+            (accum, next) => [...accum, ...next],
+            []
+          );
+          setMessage({ __html: finalErrors.join("<br>") });
+        }
+      });
+  };
+
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -21,7 +53,33 @@ const Signup = () => {
             If you have an account? Sign in here.
           </a>
         </div>
-        <form className="space-y-6" action="#" method="POST">
+
+        {message.__html && (
+          <div
+            className="bg-red-500 rounded py-2 px-3 text-white"
+            dangerouslySetInnerHTML={message}
+          ></div>
+        )}
+        <form onSubmit={HandleSignup} className="space-y-6" method="POST">
+          <div>
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Username
+            </label>
+            <div className="mt-2">
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Username..."
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
           <div>
             <label
               htmlFor="email"
@@ -35,7 +93,9 @@ const Signup = () => {
                 name="email"
                 type="email"
                 autoComplete="email"
-                required
+                placeholder="Your Email Address..."
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -55,8 +115,20 @@ const Signup = () => {
                 id="password"
                 name="password"
                 type="password"
+                placeholder="Your Password"
                 autoComplete="current-password"
-                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+
+            <div className="mt-2">
+              <input
+                id="re-password"
+                name="re-password"
+                type="password"
+                placeholder="Password Confirmation"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>

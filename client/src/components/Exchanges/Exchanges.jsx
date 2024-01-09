@@ -1,20 +1,23 @@
-const ExchangesPage = ()=>{
-    return (
-      <>
-        <header className="bg-white shadow">
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Exchanges
-            </h1>
-          </div>
-        </header>
-        <main>
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-            
-          </div>
-        </main>
-      </>
-    );
-}
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import { userStateContext } from "../../contexts/ContextProvider";
+import PageComponent from "../PageComponent";
+import TButton from "../core/TButton";
 
-export default ExchangesPage
+const ExchangesPage = () => {
+  const { tmpData } = userStateContext();
+
+  return (
+    <PageComponent
+      title={"Exchanges"}
+      data={tmpData}
+      btns={
+        <TButton color="green" to="/exchanges/create">
+          <PlusCircleIcon className="h-6 w-6 mr-2" />
+          Create New
+        </TButton>
+      }
+    />
+  );
+};
+
+export default ExchangesPage;
